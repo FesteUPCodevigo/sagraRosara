@@ -42,14 +42,15 @@ function GraphicManager() {
 
         let txtLista = `
             <div>
-                <input type='text' id='nomecliente' placeholder='Inserisci il tuo nome' class="ui-input-text"/>
-                <input type='text' id='tavolo' placeholder='Inserisci il numero del tavolo' class="ui-input-text"/>
-                <input type='number' id='coperti' placeholder='Quanti siete?' class="ui-input-text"/>
+                <p style="color: darkgray;">*Campi obbligatori*</p>
+                <input type='text' id='nomecliente' placeholder='Inserisci il tuo nome*' class="ui-input-text"/>
+                <input type='number' id='tavolo' placeholder='Inserisci il numero del tavolo*' class="ui-input-text"/>
+                <input type='number' id='coperti' placeholder='Quanti siete?*' class="ui-input-text"/>
             </div>`;
 
         elencoPrincipale.forEach(categoria => {
             const pietanze = elencoPietanze[categoria];
-            const categoriaId = `cat_${categoria.replace(/\s+/g, '_').toLowerCase()}`;
+            const categoriaId = `cat_${categoria}`;
 
             txtLista += `
                 <button class="accordion-toggle" onclick="toggleCategoria('${categoriaId}')">${categoria}</button>
@@ -84,8 +85,8 @@ function GraphicManager() {
     };
  
     this.generateResoconto = function (hashmap, dict) {
-        const elencoPietanze = dataManager.getElencoPietanze();
- 
+    const elencoPietanze = dataManager.getElencoPietanze();
+
         function getPietanzaById(id) {
             for (const tipo in elencoPietanze) {
                 const pietanze = elencoPietanze[tipo];
@@ -94,28 +95,51 @@ function GraphicManager() {
             }
             return null;
         }
- 
+    
         let txtResoconto = `
           <div>
              <h3>Nome cliente: ${dict.nomecliente}</h3>
              <h3>Tavolo: ${dict.tavolo}</h3>
              <h3>Coperti: ${dict.coperti}</h3>
           </div>`;
- 
+    
+        let totale = 0;
+    
         hashmap.keys().forEach(id => {
             const pietanza = getPietanzaById(id);
             const quantita = hashmap.get(id);
             if (pietanza) {
+                const subtotale = pietanza.prezzo * quantita;
+                totale += subtotale;
+    
                 txtResoconto += `
                    <div class="content-pietanza-ordine">
                       <div class="left nome-pietanza">${pietanza.nome}</div>
-                      <div class="center prezzo-pietanza-ordine">${(pietanza.prezzo * quantita).toFixed(2)}€</div>
+                      <div class="center prezzo-pietanza-ordine">${subtotale.toFixed(2)}€</div>
                       <div class="right">${quantita}</div>
                       <div class="endBlock"></div>
                    </div>`;
             }
         });
- 
+
+        // Aggiunta del costo coperto (1€ per ogni persona)
+        const coperti = parseInt(dict.coperti) || 0;
+        const costoCoperto = coperti * 1;
+        totale += costoCoperto;
+
+        txtResoconto += `
+       <div class="content-pietanza-ordine">
+          <div class="left nome-pietanza">Coperto</div>
+          <div class="center prezzo-pietanza-ordine">${costoCoperto.toFixed(2)}€</div>
+          <div class="right">${coperti}</div>
+          <div class="endBlock"></div>
+       </div>`;
+    
+        txtResoconto += `
+           <div class="content-totale-ordine-riepilogo">
+              <h3 style="text-align:right;">Totale: ${totale.toFixed(2)}€</h3>
+           </div>`;
+    
         return txtResoconto;
     };
  }

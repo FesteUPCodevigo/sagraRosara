@@ -1,96 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-   <meta name="viewport" content="width=device-width, initial-scale=1">
    <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Preordini - Festa</title>
 
-   <!-- Librerie -->
-   <link rel="stylesheet" href="preordini_lib/util/css.css" />
-   <script src="preordini_lib/qrcode/qrcode.js"></script>
-   <script src="preordini_lib/qrcode/qrcodemanager.js"></script>
-   <script src="preordini_lib/util/data.js"></script>
-   <script src="preordini_lib/util/hashmap.js"></script>
-   <script src="preordini_lib/util/graphicManager.js"></script>
-   <script src="preordini_lib/util/main.js"></script>
-
-   <!-- Stile per gestione visibilità pagine -->
-   <style>
-      .ui-page {
-         display: none;
-      }
-
-      .ui-page-active {
-         display: block !important;
-      }
-
-      .ui-footer, .ui-header, .ui-content {
-         padding: 10px;
-      }
-   </style>
+   <link rel="stylesheet" href="assets/css/style.css" />
+   <script src="assets/js/qrcode.min.js"></script>
+   <script defer src="assets/js/app.js"></script>
 </head>
 
 <body>
+   <div class="app-shell">
 
-<!-- Pagina principale -->
-<div class="ui-page" id="pageprinc">
-   <div class="ui-header">
-      <h1>Sagra Rosara</h1>
+      <section id="page-menu" class="page is-active">
+         <header class="app-header">
+            <img src="assets/img/logo-camboroso.png" alt="Cambroso in festa" class="app-logo" />
+            <p class="app-subtitle">Preordina dal tavolo e presenta il QR alla cassa</p>
+         </header>
+
+         <main class="page-content">
+            <section class="card customer-card">
+               <p class="required-note">* Campi obbligatori</p>
+
+               <label for="nomecliente">Nome cliente *</label>
+               <input type="text" id="nomecliente" autocomplete="name" placeholder="Es. Mario Rossi" />
+
+               <div class="form-grid">
+                  <div>
+                     <label for="tavolo">Numero tavolo *</label>
+                     <input type="number" id="tavolo" inputmode="numeric" placeholder="Es. 12" />
+                  </div>
+
+                  <div>
+                     <label for="coperti">Coperti *</label>
+                     <input type="number" id="coperti" inputmode="numeric" min="1" placeholder="Es. 4" />
+                  </div>
+               </div>
+            </section>
+
+            <section id="menu-container" class="menu-container"></section>
+         </main>
+
+         <footer class="bottom-actions">
+            <button id="resoconto-btn" class="btn btn-primary">Vedi resoconto</button>
+            <button id="elimina-ordine-btn" class="btn btn-danger">Elimina ordine</button>
+         </footer>
+      </section>
+
+      <section id="page-riepilogo" class="page">
+         <header class="app-header compact">
+            <h1>Riepilogo ordine</h1>
+            <p>Controlla i dati prima di generare il QR code</p>
+         </header>
+
+         <main class="page-content">
+            <section id="riepilogo-container" class="card"></section>
+         </main>
+
+         <footer class="bottom-actions">
+            <button id="modifica-btn" class="btn btn-secondary">Modifica ordine</button>
+            <button id="conferma-btn" class="btn btn-primary">Conferma ordine</button>
+         </footer>
+      </section>
+
+      <section id="page-qr" class="page">
+         <header class="app-header compact">
+            <h1>Ordine pronto</h1>
+            <p>Presenta questo QR code alla cassa</p>
+         </header>
+
+         <main class="page-content qr-page">
+            <section class="card qr-card">
+               <div id="qrcode"></div>
+               <p class="qr-note">Dopo la generazione del QR, l’ordine viene azzerato automaticamente.</p>
+            </section>
+         </main>
+
+         <footer class="bottom-actions single">
+            <button id="nuovo-ordine-btn" class="btn btn-primary">Nuovo ordine</button>
+         </footer>
+      </section>
+
    </div>
 
-   <div class="ui-content">
-      <div id="lista" style="margin-bottom: 30px;"></div>
-      <button class="ui-btn green-btn" id="resoconto-btn">Vedi resoconto</button>
-      <button class="ui-btn red-btn" id="elimina-ordine-btn">Elimina ordine</button>
-   </div>
-
-   <div class="ui-footer">
-      <h4>UP Codevigo</h4>
-   </div>
-
-   <div id="popup-ordine" style="display: none;">
-      <div class="ui-header"><h1 id="title-popup"></h1></div>
-      <div class="ui-content" id="content-ordine-popup">
-         <div id="info-ordine-popup"></div>
-      </div>
-   </div>
-</div>
-
-<!-- Pagina Riepilogo Ordine -->
-<div class="ui-page" id="pageresoconto">
-   <div class="ui-header">
-      <h1>Riepilogo Ordine</h1>
-   </div>
-
-   <div class="ui-content" id="contenuto-resoconto">
-      <!-- Contenuto generato dinamicamente -->
-   </div>
-
-   <div class="ui-content">
-      <button class="ui-btn red-btn" id="modifica-btn">Modifica Ordine</button>
-      <button class="ui-btn green-btn" id="conferma-btn">Conferma Ordine</button>
-   </div>
-
-   <div class="ui-footer">
-      <h4>UP Codevigo</h4>
-   </div>
-</div>
-
-<!-- Pagina QR Code -->
-<div class="ui-page" id="pageqrcode">
-   <div class="ui-header">
-      <h1>Ordine</h1>
-   </div>
-
-   <div class="ui-content" id="content-qrcode">
-      <h4>Presenta questo alla cassa e il tuo ordine sarà pronto</h4>
-      <div id="qrcode"></div>
-      <button class="ui-btn blue-btn" id="nuovo-ordine-btn">Nuovo Ordine</button>
-   </div>
-
-   <div class="ui-footer">
-      <h4>UP Codevigo</h4>
-   </div>
-</div>
-
+   <div id="toast" class="toast" aria-live="polite"></div>
 </body>
 </html>

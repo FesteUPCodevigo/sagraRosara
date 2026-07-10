@@ -2,9 +2,17 @@
    "use strict";
 
    const CONFIG = {
-      menuUrl: "dati/menu.json",
-      copertoUnitario: 1
-   };
+   menuUrl: "dati/menu.json",
+   copertoUnitario: 1,
+
+   ordineCategorie: [
+      "Primi",
+      "Secondi",
+      "Contorni",
+      "Insalatone",
+      "Bibite"
+   ]
+};
 
    const state = {
       menu: [],
@@ -51,7 +59,17 @@
             prezzo: Number(item.prezzo) || 0
          }));
 
-      state.categorie = [...new Set(state.menu.map(item => item.categoria))];
+      const categoriePresenti = [...new Set(state.menu.map(item => item.categoria))];
+
+state.categorie = [
+   ...CONFIG.ordineCategorie.filter(categoria =>
+      categoriePresenti.includes(categoria)
+   ),
+
+   ...categoriePresenti.filter(categoria =>
+      !CONFIG.ordineCategorie.includes(categoria)
+   )
+];
    }
 
    function bindEvents() {

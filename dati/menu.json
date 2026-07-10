@@ -1,9 +1,27 @@
 [
   {
+    "id": 116,
+    "piatto": "Spaghetti al ragù d'anatra",
+    "categoria": "Primi",
+    "prezzo": 7
+  },
+  {
     "id": 139,
     "piatto": "Arrosticini",
     "categoria": "Secondi",
     "prezzo": 12
+  },
+  {
+    "id": 26,
+    "piatto": "Patatine Fritte",
+    "categoria": "Contorni",
+    "prezzo": 3
+  },
+  {
+    "id": 113,
+    "piatto": "Insalatona Olivia (radicchio rosso, scarola, valerianella, tonno, olive)",
+    "categoria": "Insalatone",
+    "prezzo": 6.5
   },
   {
     "id": 140,
@@ -113,12 +131,7 @@
     "categoria": "Secondi",
     "prezzo": 11
   },
-  {
-    "id": 116,
-    "piatto": "Spaghetti al ragù d'anatra",
-    "categoria": "Primi",
-    "prezzo": 7
-  },
+  
   {
     "id": 125,
     "piatto": "Gnocchi al ragù d'anatra",
@@ -131,12 +144,7 @@
     "categoria": "Insalatone",
     "prezzo": 6.5
   },
-  {
-    "id": 113,
-    "piatto": "Insalatona Olivia (radicchio rosso, scarola, valerianella, tonno, olive)",
-    "categoria": "Insalatone",
-    "prezzo": 6.5
-  },
+  
   {
     "id": 114,
     "piatto": "Insalatona Greca (scarola, rucola, pomodorini, feta, olive)",
@@ -347,12 +355,7 @@
     "categoria": "Contorni",
     "prezzo": 3
   },
-  {
-    "id": 26,
-    "piatto": "Patatine Fritte",
-    "categoria": "Contorni",
-    "prezzo": 3
-  },
+  
   {
     "id": 137,
     "piatto": "AGGIUNTA PANE",
